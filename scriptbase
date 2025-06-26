@@ -1,0 +1,67 @@
+using System;
+using System.Text.RegularExpressions;
+
+internal class NewBaseType
+{
+    static string IdentifyCardBrand(string cardNumber)
+    {
+        // Visa: começa com 4
+        if (Regex.IsMatch(cardNumber, @"^4"))
+        {
+            return "Visa";
+        }
+
+        // MasterCard: começa com 51 a 55 ou de 2221 a 2720
+        if (Regex.IsMatch(cardNumber, @"^5[1-5]") || Regex.IsMatch(cardNumber, @"^22[2-9]\d|^2[3-6]\d{2}|^27[01]\d|^2720"))
+        {
+            return "MasterCard";
+        }
+
+        // American Express: começa com 34 ou 37
+        if (Regex.IsMatch(cardNumber, @"^3[47]"))
+        {
+            return "American Express";
+        }
+
+        // Elo: prefixos específicos
+        if (Regex.IsMatch(cardNumber, @"^4011|^4312|^4389|^4514|^4576|^5041|^5066|^5090|^6277|^6362|^6363|^6504|^6505|^6506|^6507|^6509|^6516|^6550"))
+        {
+            return "Elo";
+        }
+
+        // Discover: começa com 6011, 622126–622925, 644–649 ou 65
+        if (Regex.IsMatch(cardNumber, @"^6011|^65|^64[4-9]|^622(12[6-9]|1[3-9]\d|[2-8]\d{2}|9[0-2]\d|93[0-5])"))
+        {
+            return "Discover";
+        }
+
+        // Nenhuma bandeira reconhecida
+        return null;
+    }
+    static void Main(string[] args)
+    {
+        Console.WriteLine("Digite o número do cartão de crédito:");
+        string cardNumber = Console.ReadLine();
+
+        if (string.IsNullOrWhiteSpace(cardNumber) || !Regex.IsMatch(cardNumber, @"^\d+$"))
+        {
+            Console.WriteLine("Número inválido. Certifique-se de digitar apenas números.");
+            return;
+        }
+
+        string cardBrand = IdentifyCardBrand(cardNumber);
+
+        if (string.IsNullOrEmpty(cardBrand))
+        {
+            Console.WriteLine("Bandeira não reconhecida.");
+        }
+        else
+        {
+            Console.WriteLine($"Bandeira detectada: {cardBrand}");
+        }
+    }
+}
+
+class Program : NewBaseType
+{
+}
